@@ -93,7 +93,7 @@ Index of /jabc/modules/system
 [ ]	theme.api.php	2016-04-16 15:17 	8.8K
 
 ```
-All TXT files are basically CSS files, not too important information there, so I continued browsing through JABS products and found the page: /jabc/?q=node/7.
+All TXT files are basically CSS files, not too important information there, so I continued browsing through JABS products inspecting all page's source code and found this page: /jabc/?q=node/7.
 
 Inspecting the source I found the following lines: 
 ```
