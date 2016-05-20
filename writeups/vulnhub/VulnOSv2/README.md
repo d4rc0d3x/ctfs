@@ -45,6 +45,10 @@ Nmap done: 1 IP address (1 host up) scanned in 1041.99 seconds
 ```
 
 So we discovered it has the following services running:
-- SSH
-- IRCd
+- SSH (22/TCP)
+- HTTP (80/TCP)
+- IRCd (6667/TCP)
 
+Firing up the browser we encounter a black screen pointing us to http://192.168.0.15/jabc/. 
+
+Following this link we reach another page called "JBC Just Another Bioware Company".
