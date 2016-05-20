@@ -197,13 +197,13 @@ Possible Hashs:
 [+]  Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username)))
 ```
 
-So let's do the cracking in an easy way, throwing the hash into google. It was very easy to retrieve the password for this hash, which is "webmin1980".
+Instead of cracking the password, which would take too long depending of the it's complexity, let's justdo it the easy way, throw the hash into google. It was very easy to retrieve the password for this hash, which is "webmin1980". The website used to crack the MD5 hash was http://md5cracker.org/.
 
-Let's try to log in the same application again with the credentials webmin/webmin1908. DONE !!! Worked like a charm !!
+Let's try to log in the same application again with the credentials webmin/webmin1908. GOT IT !!! Worked like a charm !!
 
-Now i've noticed that we have a new menu option called "Admin". Cool !!
+Now i've noticed that we have a new menu option in the upper corner called "Admin". Cool !!
 
-Checking the "webmin" settings I can see that it's actually a real user, so we can try to SSH into the server with the same credentials.
+Going to the "Admin" option and checking the "webmin" user settings I can see that it's actually a real O.S. user, so we can try to SSH into the server with the same credentials.
 
 ```
 ssh webmin@192.168.0.15
@@ -240,7 +240,7 @@ $ id
 uid=1001(webmin) gid=1001(webmin) groups=1001(webmin)
 ```
 
-OK, we are just a normal user in the system, but checking out our uname output, we can se we're using an Ubuntu Server with a kernel that's vulnerable to a Local Privilege Escalation exploit:
+OK, we are just a normal user in the system, but checking out our uname output, we can se we're in an Ubuntu Server with a kernel that is very well known to be vulnerable to a Local Privilege Escalation exploit:
 
 ```
 $ uname -a
@@ -256,7 +256,7 @@ $ which gcc
 /usr/bin/gcc
 ```
 
-Yeah, we have GCC, so everything should be ready to go.
+Yeah, we have GCC, all set, we should be ready to go.
 
 Once we don't have write privileges in the directory we are now, we change to /tmp directory and create a file called "exploit.c" to place our exploit.
 
@@ -281,7 +281,7 @@ creating shared library
 root
 ```
 
-Pwned !!!! Now we are root. The only thing left is to find the flag. Let's list the files in our home directory ~root:
+Pwned !!!! Now we are root. The only thing left is to find the flag. Let's try to list the files in our home directory ~root:
 
 ```
 # cd ~root
