@@ -197,4 +197,8 @@ Possible Hashs:
 [+]  Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username)))
 ```
 
-So let's do the cracking in an easy way, throwing the hash into google.
+So let's do the cracking in an easy way, throwing the hash into google. It was very easy to retrieve the password for this hash, which is "webmin1980".
+
+Let's try to log in the same application again with the credentials webmin/webmin1908. DONE !!! Worked like a charm !!
+
+Now i've noticed that we have a new menu option called "Admin". Cool !!
