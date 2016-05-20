@@ -107,3 +107,11 @@ Now we've got a new link called /jbacd0cs/ and also some guest/guest credentials
 Using the guest/guest credentials it was possible to log into the application.
 
 We are presented with something like a database administration but with guest privileges.
+
+First I've tried to upload a simple test.php file with a print inside, but I've got the error message: 
+
+```
+MIMETYPE: text/x-php Failed
+```
+
+So we can assume that the system is blocking PHP files. So I started looking for exploits for "OpenDocMan
