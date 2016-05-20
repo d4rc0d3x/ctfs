@@ -1,6 +1,4 @@
-Description: Writeup of VulnOSv2 VM in Vulnhub by the author c4b3rw0lf
-
-###### Scanning 
+###### Description: Writeup of VulnOSv2 VM in Vulnhub by the author c4b3rw0lf
 
 Let's begin by scanning the host: 
 
