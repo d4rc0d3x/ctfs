@@ -51,4 +51,26 @@ So we discovered it has the following services running:
 
 Firing up the browser we encounter a black screen pointing us to http://192.168.0.15/jabc/. 
 
-Following this link we reach another page called "JBC Just Another Bioware Company".
+Following this link we reach another page called "JBC Just Another Bioware Company". Not many interesting stuff here so I decided to have a look at the website source code. 
+
+Poking around some pages I've found http://192.168.0.15/jabc/modules/system/ with apache index enabled, with many many files:
+
+```
+Index of /jabc/modules/system
+[ICO]	Name	Last modified	Size	Description
+[PARENTDIR]	Parent Directory	 	- 	 
+[ ]	html.tpl.php	2016-04-16 15:17 	2.7K	 
+[ ]	image.gd.inc	2016-04-16 15:17 	12K	 
+[ ]	language.api.php	2016-04-16 15:17 	6.4K	 
+[ ]	maintenance-page.tpl.php	2016-04-16 15:17 	2.9K	 
+[ ]	page.tpl.php	2016-04-16 15:17 	6.8K	 
+[ ]	region.tpl.php	2016-04-16 15:17 	1.3K	 
+[TXT]	system.admin-rtl.css	2016-04-16 15:17 	1.4K	 
+[TXT]	system.admin.css	2016-04-16 15:17 	5.0K	 
+[ ]	system.admin.inc	2016-04-16 15:17 	113K	 
+[ ]	system.api.php	2016-04-16 15:17 	193K	 
+[ ]	system.archiver.inc	2016-04-16 15:17 	3.0K	 
+[TXT]	system.base-rtl.css	2016-04-16 15:17 	869 	
+... snip ...
+
+```
