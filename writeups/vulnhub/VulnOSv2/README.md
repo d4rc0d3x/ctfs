@@ -53,7 +53,7 @@ Firing up the browser we encounter a black screen pointing us to http://192.168.
 
 Following this link we reach another page called "JBC Just Another Bioware Company". Not many interesting stuff here so I decided to have a look at the website source code. 
 
-Poking around some pages I've found http://192.168.0.15/jabc/modules/system/ with apache index enabled, with many many files:
+Poking around some pages I've found /jabc/modules/system/ with apache index enabled, with many many files:
 
 ```
 Index of /jabc/modules/system
@@ -93,7 +93,7 @@ Index of /jabc/modules/system
 [ ]	theme.api.php	2016-04-16 15:17 	8.8K
 
 ```
-All TXT files are basically CSS files, not too important information there, so I continued browsing through JABS products and found the page: http://192.168.0.15/jabc/?q=node/7.
+All TXT files are basically CSS files, not too important information there, so I continued browsing through JABS products and found the page: /jabc/?q=node/7.
 
 Inspecting the source I found the following lines: 
 ```
@@ -101,3 +101,9 @@ Inspecting the source I found the following lines:
 <p><span style="color:#000000">For a detailed view and documentation of our products, please visit our documentation platform at /jabcd0cs/ on the server. Just login with guest/guest</span></p>
 <p><span style="color:#000000">Thank you.</span></p>
 ```
+
+Now we've got a new link called /jbacd0cs/ and also some guest/guest credentials. Accessing the URL in question it gets us to a page called "opendocman".
+
+Using the guest/guest credentials it was possible to log into the application.
+
+We are presented with something like a database administration but with guest privileges.
