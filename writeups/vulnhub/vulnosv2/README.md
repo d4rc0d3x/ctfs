@@ -1,6 +1,13 @@
-Author: d4rc0d3x
+Description: Writeup of VulnOSv2 VM in Vulnhub by the author c4b3rw0lf
 
-Description: Writeup of VulnOSv2
+Let's begin by scanning the host: 
 
-Date: 2016/05/19
+'''
+# testing
+'''
+
+So we discovered it has the following services running:
+- SSH
+- IRCd
+
 
