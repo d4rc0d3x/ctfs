@@ -93,3 +93,11 @@ Index of /jabc/modules/system
 [ ]	theme.api.php	2016-04-16 15:17 	8.8K
 
 ```
+All TXT files are basically CSS files, not too important information there, so I continued browsing through JABS products and found the page: http://192.168.0.15/jabc/?q=node/7.
+
+Inspecting the source I found the following lines: 
+```
+<p><span style="color:#000000">For security reasons, this section is hidden.</span></p>
+<p><span style="color:#000000">For a detailed view and documentation of our products, please visit our documentation platform at /jabcd0cs/ on the server. Just login with guest/guest</span></p>
+<p><span style="color:#000000">Thank you.</span></p>
+```
