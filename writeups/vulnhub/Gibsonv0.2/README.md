@@ -430,7 +430,7 @@ OK, enough of this. Let me check if there is another file with the word "flag" i
 ./.trash/flag.txt.gpg
 ```
 
-AHA !! Now we are talking. This seems to be the file that contains the flag, but it's encrypted with PGP. So maybe we have to use our "zerocool" name as a password to decrypt the file.
+AHA !! Now we are talking. This seems to be the file that contains the flag, but it's encrypted. So maybe we have to use our "zerocool" name as a password to decrypt the file.
 
 After a little Googling and GPG man pages I've came up with a string that could potentially decrypt our file if we provide it the correct passphrase, and write the output in another file.
 
