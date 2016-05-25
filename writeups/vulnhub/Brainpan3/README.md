@@ -6,8 +6,7 @@
 # nmap -A -T4 -sV -PN -p- 172.16.16.140
 
 Starting Nmap 6.40 ( http://nmap.org ) at 2016-05-25 12:16 IST
-Stats: 0:04:53 elapsed; 0 hosts completed (1 up), 1 undergoing SYN Stealth Scan
-SYN Stealth Scan Timing: About 43.59% done; ETC: 12:27 (0:06:19 remaining)
+
 Nmap scan report for 172.16.16.140
 Host is up (0.00022s latency).
 Not shown: 65533 filtered ports
@@ -240,7 +239,7 @@ ENTER COMMAND:
 
 Hurray, we are in. We are presented with more options than we had before.
 
-##### Option "4  - Shell"
+##### Option: "4  - SHELL"
 
 There seems to be a very interesting option called "4  - Shell". Let's try that:
 
@@ -285,7 +284,7 @@ reynard@brainpan3 $ cat .flag
 
 YUP !!! Just as I imagined, just a little joke :), besides the "never gonna give you up never gonna let you down" which I remember to be the refrain of a very famous song by Ricky Astley. Oh boy, how I miss the 80's.
 
-OK. I've spent some time checking for useful commands but it seems we have only some commands like "ls", "id", "cat .flag" to use. So let's out some directories, just to make sure :)
+OK. I've spent some time checking for useful commands but it seems we have only some commands like "ls", "id", "whoami", "cat .flag" and "exit" to use. So let's out some directories, just to make sure :)
 
 ```
 reynard@brainpan3 $ vim
@@ -317,15 +316,361 @@ reynard@brainpan3 $ /bin/sh
 ```
 OK, no luck at all. 
 
-We can try some CHROOT/Jail Shell Escape techniques and check if we can go out of it.
+We can try some CHROOT/Jail Shell Escape techniques and check if we can go out of it, but after checking out the commands we have, i ended concluding it is useless.
 
-```
-```
-
-Let's try to overflow the shell input with Characteres: 
+So let's try to overflow the shell input with Characteres: 
 
 ```
 reynard@brainpan3 $ ASD;LKJASD;FLJKADSFL;KJSD;LFKJADSFOIASDOFIUASDFKJASDLFKJSADLFJASDFJASJDFLJSALDLKSADJFLKSDLKSALDFJLAKSDFLKSJDFKJASDFJLKSADJFKADSLFKJASLDFJAS;DLKFJASLDKFJADSKLFJKJASF
 ```
 
 Another dead end. We are thrown back to the menu. Couldn't find any usefull command in shell. If there is a way of getting root from the shell, i couldn't find out. So Let's move to another place.
+
+
+##### Option: "1  - CREATE REPORT"
+
+OK, let's try the other option: 
+
+```
+--------------------------------------------------------------
+SESSION: ID-9589
+  AUTH   [Y]    REPORT [N]    MENU   [Y]  
+--------------------------------------------------------------
+
+
+1  - CREATE REPORT
+2  - VIEW CODE REPOSITORY
+3  - UPDATE SESSION NAME
+4  - SHELL
+5  - LOG OFF
+
+ENTER COMMAND: 1
+SELECTED: 1
+REPORT MODE IS DISABLED IN THIS BUILD
+```
+
+Tried to click again and the same thing happened
+
+
+##### Option: "2  - VIEW CODE REPOSITORY"
+
+OK, let's choose this option: 
+
+```
+--------------------------------------------------------------
+SESSION: ID-9589
+  AUTH   [Y]    REPORT [N]    MENU   [Y]  
+--------------------------------------------------------------
+
+
+1  - CREATE REPORT
+2  - VIEW CODE REPOSITORY
+3  - UPDATE SESSION NAME
+4  - SHELL
+5  - LOG OFF
+
+ENTER COMMAND: 2
+SELECTED: 2
+
+CODE REPOSITORY IS NOW AVAILABLE
+```
+
+After clicking for the second time the same option we've got a slightly different message: 
+
+```
+CODE REPOSITORY IS ALREADY ENABLED
+```
+
+Again. Nothing really interesting there
+
+
+##### Option: "3  - UPDATE SESSION NAME"
+
+OK, let's choose this option:
+
+```
+--------------------------------------------------------------
+SESSION: ID-9589
+  AUTH   [Y]    REPORT [N]    MENU   [Y]  
+--------------------------------------------------------------
+
+
+1  - CREATE REPORT
+2  - VIEW CODE REPOSITORY
+3  - UPDATE SESSION NAME
+4  - SHELL
+5  - LOG OFF
+
+ENTER COMMAND: 3
+SELECTED: 3
+ENTER NEW SESSION NAME: 
+```
+
+OK, function 3 asks for a input. After trying some random things like numbers, names, NO GO again. So let's try again to BOF the option: 
+
+```
+ENTER NEW SESSION NAME: AAAAAAAAAAAAABBBBBBBBBBBBBBCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDEEEEEEEEEEEEEEEEEFFFFFFFFFFFFFFFFFFGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIIIAAAAAAAAAAAAABBBBBBBBBBBBBBCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDEEEEEEEEEEEEEEEEEFFFFFFFFFFFFFFFFFFGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIIIAAAAAAAAAAAAABBBBBBBBBBBBBBCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDEEEEEEEEEEEEEEEEEFFFFFFFFFFFFFFFFFFGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIII
+
+YOU ARE NO LONGER AUTHENTICATED.
+PLEASE RE-AUTHENTICATE.
+
+AUTHORIZED PERSONNEL ONLY
+PLEASE ENTER THE 4-DIGIT CODE SHOWN ON YOUR ACCESS TOKEN
+A NEW CODE WILL BE GENERATED AFTER THREE INCORRECT ATTEMPTS
+
+ACCESS CODE: 
+
+                      /´¯/) 
+                    ,/¯  / 
+                   /    / 
+             /´¯/'   '/´¯¯`·¸ 
+          /'/   /    /       /¨¯\ 
+        ('(   ´   ´     ¯~/'   ') 
+         \                 '     / 
+          ''   \           _.·´ 
+            \              ( 
+              \__-_-____-___\   
+
+
+
+--------------------------------------------------------------
+SESSION: ID-6897
+  AUTH   [Y]    REPORT [N]    MENU   [Y]  
+--------------------------------------------------------------
+
+
+1  - CREATE REPORT
+2  - VIEW CODE REPOSITORY
+3  - UPDATE SESSION NAME
+4  - SHELL
+5  - LOG OFF
+
+ENTER COMMAND: 
+```
+
+OK, this time, the administrator is a little bit pissed with me appearently LOL.
+
+Let's try to pass a series of decimal format strings: 
+
+```
+--------------------------------------------------------------
+SESSION: 
+D-689
+  AUTH   [Y]    REPORT [N]    MENU   [Y]  
+--------------------------------------------------------------
+
+
+1  - CREATE REPORT
+2  - VIEW CODE REPOSITORY
+3  - UPDATE SESSION NAME
+4  - SHELL
+5  - LOG OFF
+
+ENTER COMMAND: 3
+SELECTED: 3
+ENTER NEW SESSION NAME: %d.%d.%d.%d.%d.%d.%d.%d
+--------------------------------------------------------------
+SESSION: -1076080660.260.623797285.1680158308.778315054.623797285.1680158308.174335278
+ue
+  AUTH   [Y]    REPORT [N]    MENU   [Y]  
+--------------------------------------------------------------
+
+
+1  - CREATE REPORT
+2  - VIEW CODE REPOSITORY
+3  - UPDATE SESSION NAME
+4  - SHELL
+5  - LOG OFF
+
+ENTER COMMAND: 
+```
+
+OK, nothing again. Running out of options.
+
+
+##### Port Scanning Again
+
+I just remembered that whem we used the option "2  - VIEW CODE REPOSITORY" it said the repository was enabled. So I thought of scanning the server again: 
+
+```
+PORT     STATE SERVICE VERSION
+1337/tcp open  waste?
+8080/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.6)
+|_http-methods: No Allow or Public header in OPTIONS response (status code 501)
+| http-robots.txt: 1 disallowed entry 
+|_/bp3_repo
+|_http-title: Brainpan III
+```
+
+Ok !!! Now there is one more service UP in port 8080, and it seems to be a HTTP server. Nmap could also check for a disallowed entry in robots.txt called "/bp3_repo".
+
+Let's just fire up the browser and see what we can get
+
+##### Service HTTP 8080/TCP Port
+
+We found a page with some cool content, that goes for miles and miles. Which is just really a big picture.
+
+<TAG DE IMAGEM AQUI>
+
+Code inspection on that page showed nothing special: 
+
+```
+<html>
+<head>
+<title>Brainpan III</title>
+</head>
+<body>
+<center>
+<!-- inforgraphic by Hotspot Shield VPN -->
+<!-- http://www.dailyinfographic.com/where-youll-get-hacked-infographic -->
+<img src="infographic.png"/>
+</center>
+</body>
+</html>
+
+```
+
+So, it's time to go to /bp3_repo. That's what we found there. Just a animated gif called "mario.gif"
+
+<TAG PICUTRE HTTP-2-MARIO.PNG>
+
+Code analisis showed nothing again: 
+
+```
+<html>
+<head>
+<title>Brainpan III</title>
+</head>
+<body>
+<center>
+<img src="mario.gif"/>
+<br/>
+<pre>Let's-a-go!</pre>
+</center>
+</body>
+</html>
+```
+
+##### Brute forcing Directories
+
+OK, with too much time spent already and nothing really useful to work with, i've tried to bruteforce the webserver directories and check what I could get. I used dirb for this one from my Kali Box: 
+
+```
+root@kali:~# dirb http://172.16.16.140:8080
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Wed May 25 11:23:19 2016
+URL_BASE: http://172.16.16.140:8080/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://172.16.16.140:8080/ ----
++ http://172.16.16.140:8080/index.html (CODE:200|SIZE:241)                                                                                                                                                                            
++ http://172.16.16.140:8080/repo (CODE:301|SIZE:0)                                                                                                                                                                                    
++ http://172.16.16.140:8080/robots.txt (CODE:200|SIZE:34)                                                                                                                                                                             
+                                                                                                                                                                                                                                      
+-----------------
+END_TIME: Wed May 25 11:23:24 2016
+DOWNLOADED: 4612 - FOUND: 3
+
+```
+
+Aha, at least something new. We can see that we have the previous files we already new, and also one directory called "/repo". Let's give it a try in the browser:
+
+<TAG PICTURE HTTP-3-REPO-DIRECTORY>
+
+Now we have found 5 files. Inspecting the content of the files, I've got
+
+From "README.txt":   
+"Well you've made it this far. No turning back now."
+
+From "how-to-pwn-brainpan.jpg": 
+
+<TAG PICTURE HTTP-4-how-to-pwn-brainpan>
+
+Well, it doesn't hurt to try it right ? As I expected, again another joke. HAHAHA
+
+Files "bofh", "report" and "shell" appear to be BIN files, so I've downloaded them to my Kali Box and began some forensics.
+
+
+##### File: "shell"
+
+Let's run the file in our machine and check what we can get from there: 
+
+```
+# ./shell 
+            ___
+        .-"; ! ;"-.
+      .'!  : | :  !`.
+     /\  ! : ! : !  /\
+    /\ |  ! :|: !  | /\
+   (  \ \ ; :!: ; / /  )
+  ( `. \ | !:|:! | / .' )
+  (`. \ \ \!:|:!/ / / .')
+   \ `.`.\ |!|! |/,'.' /
+    `._`.\\\!!!// .'_.'
+       `.`.\\|//.'.'
+        |`._`n'_.'|
+        "----^----"
+
+     here's your shell
+```
+
+##### File: "report"
+
+Now the other file: 
+
+```
+# ./report 
+./report <report> [0|1]
+
+# ./report test 1
+               ____
+           .-'&    '-.
+          / __    __  \
+         :-(__)--(__)--;
+        (      (_       )
+         :             ;
+          \    __     /
+           `-._____.-'
+             /`"""`\
+            /    ,  \
+           /|/\/\/\ _\
+          (_|/\/\/\\__)
+            |_______|
+           __)_ |_ (__
+          (_____|_____)
+
+       YOU'RE IN THE MATRIX
+           CHARLIE BROWN
+
+```
+
+The same thing happens with option "0".
+
+##### File: "bofh"
+
+Now for the last file: 
+
+```
+# ./bofh 
+Usage ./bofh filename
+Description: An exercise in futility.
+
+# ./bofh test.txt 
+Couldn't open wo+ft�CJ
+
+```
+
+Any kind of file could be opened by "./bofh". So let's inspect its strings and see what info can we get.
+
+
+
+<TAG> ... to be continued
