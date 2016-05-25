@@ -288,7 +288,6 @@ udp        0      0 0.0.0.0:67              0.0.0.0:*                           
 udp        0      0 0.0.0.0:68              0.0.0.0:*                           910/dhclient    
 udp        0      0 0.0.0.0:55622           0.0.0.0:*                           910/dhclient    
 udp6       0      0 :::56299                :::*                                910/dhclient
-
 ```
 
 OK, we have a "DNS", "VNC", "DHCP", "SSH" and also an "HTTP" running, all listening to external connections. 
@@ -338,20 +337,164 @@ root@gibson:/# find / -name *ftpserv*
 
 OK, found some information on this machine, including the VM image which is in "/var/lib/libvirt/images/ftpserv.img". Everything seems to lead us to find the flag inside this machine, so I've copied the image to my host to check it.
 
-Let's now try to mount the qemu VM filesystem:
+Let's now obtain some more information on the qemu VM filesystem:
 
 ```
+# fdisk -l ftpserv.img 
+
+Disk ftpserv.img: 536 MB, 536870912 bytes
+16 heads, 63 sectors/track, 1040 cylinders, total 1048576 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+      Device Boot      Start         End      Blocks   Id  System
+ftpserv.img1   *          63     1048319      524128+   e  W95 FAT16 (LBA)
 ```
 
+OK, we can see that the image file has just one FAT16 partitition marked as Boot. So let's try to mount it
+
+```
+# losetup /dev/loop0 ftpserv.img 
+# kpartx -a /dev/loop0
+# mount /dev/mapper/loop0p1 /media/strider/KFYLNN/
+# cd /media/strider/KFYLNN/
+# ls -l
+total 168
+-rwxr-xr-x  1 strider strider  1328 May  4 20:57 AUTOEXEC.BAT
+-rw-r--r--  1 strider strider   512 May  4 19:15 BOOTSECT.BIN
+-rwxr-xr-x  1 strider strider 66945 Aug 28  2006 COMMAND.COM
+drwx------ 11 strider strider  8192 May  4 19:08 DOS
+-rw-r--r--  1 strider strider   836 May  4 19:15 FDCONFIG.SYS
+drwx------  2 strider strider  8192 May  4 21:03 GARBAGE
+-rw-r--r--  1 strider strider 45344 Jun 21  2011 KERNEL.SYS
+drwx------  2 strider strider  8192 May  4 20:46 net
+
+```
+
+OK, now with the img file mounted, just for the sake of it, let's inspect for files that has the word "flag" in the name:
+
+```
+# find . -name *flag*
+./GARBAGE/flag.img
+```
+
+OK, now i've just found another img file. GOSH !!! It seems to be a EXT2 file system file: 
+
+```
+# file GARBAGE/flag.img 
+GARBAGE/flag.img: Linux rev 1.0 ext2 filesystem data, UUID=d59bdd40-ec37-4d24-a956-80f549846121
+```
+
+Let's try to mount it and see what we've got.
+
+```
+thegrid GARBAGE # mount -t ext2 flag.img /mnt/test/ -o loop
+thegrid GARBAGE # ls /mnt/test/
+davinci  davinci.c  hint.txt  lost+found
+```
+
+Ok, now we have other files. Immediatelly I see a "hint.txt" with the following content:
+
+```
+http://www.imdb.com/title/tt0117951/ and
+http://www.imdb.com/title/tt0113243/ have
+someone in common... Can you remember his
+original nom de plume in 1988...?
+```
+
+Checked very quickly the two IMDB URLs provided. I've never seen the first movie, but the second I know very well as one of the worst hacking movies of all times :). Well, it seems they have one actor in common, "John Lee Miller", which is the character "Zero Cool" in Hackers.
+
+OK, at this momment I really don't know what to think of this, so let's keep going on checking the other files around.
+
+The file "adminspo.jpg" there is a message about choosing "sysmadmin". Maybe we can use it as an user for some bruteforcing. Let's keep on.
+
+By using command strings on the file "jz_ug.ans", the only understandable information we can find is the sentence below
+
+```
+# strings jz_ug.ans
+
+... snip ...
+
+9;1H
+[20Cthe ugliest of all are under 5 
+[ufeet tall
+
+```
+
+OK, enough of this. Let me check if there is another file with the word "flag" in it in our newly mounted image "flag.img" which is in "/mnt/test" directory:
+
+```
+# find . -name *flag*
+./.trash/flag.txt.gpg
+```
+
+AHA !! Now we are talking. This seems to be the file that contains the flag, but it's encrypted with PGP. So maybe we have to use our "zerocool" name as a password to decrypt the file.
+
+After a little Googling and GPG man pages I've came up with a string that could potentially decrypt our file if we provide it the correct passphrase, and write the output in another file.
+
+```
+# gpg --output flag.txt --passphrase <PASS> --decrypt flag.txt.gpg
+```
+
+Let's try this command manually with some password file with the following content: 
+
+```
+zerocool
+zerokool
+Zerokool
+ZeroKool
+Zerocool
+zero cool
+Zero Cool
+zero Kool
+Zero kool
+zero kool
+
+... snip ...
+```
+... and other similar passwords and gpg to unencrypt it. OK, nothing happened, so maybe we will have to bruteforce it. The only right information we have is that the password is definitelly some variation of "zero cool", maybe spaces capitalization, l33t, etc.
+
+Let's create a password.txt file with the same password content tested by hand and use john to perform some transformations for us to generate another password.txt file.
+
+```
+# /opt/pentest/cracking/softs/jtr/john-1.8.0-jumbo-1/run/john --rules=KoreLogicRulesL33t --wordlist=password.txt --stdout > zerocoolpass.txt
+Press 'q' or Ctrl-C to abort, almost any other key for status
+525p 0:00:00:00 100.00% (2016-05-25 10:59) 5250p/s Z3r0 k001
+```
+
+OK, no we have 525 variations of zero cool with and without space using L33T transformation, in file "zerocoolpass.txt". I'd say it's a good start.
+
+Let's use a very quick and ugly for command in bash prompt to go through our password file and using the same gpg command we used before:
+
+```
+# for i in $(cat zerocoolpass.txt); do gpg --output flag.txt --passphrase $i --decrypt flag.txt.gpg; done
+```
+
+Voilá !!!! There it is, our flag.
+
+```
+# cat flag.txt
+ _   _            _      _____ _             ____  _                  _   _
+| | | | __ _  ___| | __ |_   _| |__   ___   |  _ \| | __ _ _ __   ___| |_| |
+| |_| |/ _` |/ __| |/ /   | | | '_ \ / _ \  | |_) | |/ _` | '_ \ / _ \ __| |
+|  _  | (_| | (__|   <    | | | | | |  __/  |  __/| | (_| | | | |  __/ |_|_|
+|_| |_|\__,_|\___|_|\_\   |_| |_| |_|\___|  |_|   |_|\__,_|_| |_|\___|\__(_)
 
 
+Should you not be standing in a 360 degree rotating payphone when reading
+this flag...? B-)
 
+Anyhow, congratulations once more on rooting this VM. This time things were
+a bit esoteric, but I hope you enjoyed it all the same.
 
+Shout-outs again to #vulnhub for hosting a great learning tool. A special
+thanks goes to g0blin and GKNSB for testing, and to g0tM1lk for the offer
+to host the CTF once more.
+                                                              --Knightmare
+```
 
+I hope it can help you on your journey to the "source' :)
 
-
-
-
-
-
-
+See ya
