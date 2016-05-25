@@ -261,7 +261,7 @@ root@gibson:~# whoami
 root
 ```
 
-Hurrayyy !! No we've got root. OK. Let's look search for the FLAG !!!
+Hurrayyy !! Now we've got root. OK. Let's look search for the FLAG !!!
 
 Checked the /root directory but found nothing interesting there, as it was supposed to be. Just remembered what "knightmare" said: "The flag is not where you expect to find it.". That should be /root directory, so let's check again for files with the word "flag" in the name:
 
@@ -464,7 +464,7 @@ Press 'q' or Ctrl-C to abort, almost any other key for status
 525p 0:00:00:00 100.00% (2016-05-25 10:59) 5250p/s Z3r0 k001
 ```
 
-OK, no we have 525 variations of zero cool with and without space using L33T transformation, in file "zerocoolpass.txt". I'd say it's a good start.
+OK, now we have 525 variations of zero cool with and without space using L33T transformation, in file "zerocoolpass.txt". I'd say it's a good start.
 
 Let's use a very quick and ugly for command in bash prompt to go through our password file and using the same gpg command we used before:
 
