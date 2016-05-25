@@ -1,4 +1,4 @@
-###### Description: Writeup of Brainpan 3 VM in Vulnhub by the author superkojiman
+#### Description: Writeup of Brainpan 3 VM in Vulnhub by the author superkojiman
 
 ##### Port Scanning All ports on the VM
 
@@ -238,7 +238,11 @@ SESSION: ID-9589
 ENTER COMMAND: 
 ```
 
-Hurray, we are in. We are presented with more options than we had before, and a very interesting one called "4  - Shell". Let's try that:
+Hurray, we are in. We are presented with more options than we had before.
+
+##### Option "4  - Shell"
+
+There seems to be a very interesting option called "4  - Shell". Let's try that:
 
 ```
 ENTER COMMAND: 4
@@ -325,6 +329,3 @@ reynard@brainpan3 $ ASD;LKJASD;FLJKADSFL;KJSD;LFKJADSFOIASDOFIUASDFKJASDLFKJSADL
 ```
 
 Another dead end. We are thrown back to the menu. Couldn't find any usefull command in shell. If there is a way of getting root from the shell, i couldn't find out. So Let's move to another place.
-
-
-
