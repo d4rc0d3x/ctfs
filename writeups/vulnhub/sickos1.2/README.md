@@ -164,10 +164,12 @@ OK, nikto has found the same /etc directory dirb found, but some additionall thi
 
 <IMAGE "php-info.png">
 
+
 #### Exploring Web Service /test Directory
 
 OK, let's try to enumerate HTTP methods using curl. FOund really nothing in "/" but in "/test" I've got the following:
 
+```
 # curl -v -X OPTIONS http://172.16.16.141/test
 * Hostname was NOT found in DNS cache
 *   Trying 172.16.16.141...
@@ -188,6 +190,7 @@ OK, let's try to enumerate HTTP methods using curl. FOund really nothing in "/" 
 < Server: lighttpd/1.4.28
 < 
 * Connection #0 to host 172.16.16.141 left intact
+```
 
 The /test/ directory appears to be accepting a lot of HTTP Methods, including PUT, which we can use to upload a file. Let's create a simple TXT file just to validate this finding.
 
