@@ -1,7 +1,7 @@
 ###### SickOS 1.2 W1riteup
 ###### Description: Writeup of SickOS 1.2 VM in Vulnhub by the author D4rk
 
-### Scanning
+#### Scanning
 
 ```
 # nmap -A -T4 -PN -sV -p- 172.16.16.141
@@ -163,6 +163,8 @@ Let's try a little bit of vulnerability scanning with nikto and see if we get so
 OK, nikto has found the same /etc directory dirb found, but some additionall things, like OSVDB-12184 related to php. Trying that led us to a phpinfo page:
 
 <IMAGE "php-info.png">
+
+#### Exploring Web Service /test Directory
 
 OK, let's try to enumerate HTTP methods using curl. FOund really nothing in "/" but in "/test" I've got the following:
 
