@@ -1,4 +1,4 @@
-###### SickOS 1.2 W1riteup
+###### SickOS 1.2 Writeup
 ###### Description: Writeup of SickOS 1.2 VM in Vulnhub by the author D4rk
 
 #### Scanning
